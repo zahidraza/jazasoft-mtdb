@@ -10,6 +10,6 @@ const handlers = {
 
 export default function testReducer (state = initialState, action) {
   let handler = handlers[action.type];
-  if( !handler ) return state;
+  if (!handler) return state;
   return { ...state, ...handler(state, action) };
 }
