@@ -28,8 +28,6 @@ class UserAdd extends Component {
   }
 
   _addUser () {
-    console.log(this.state.user);
-    console.log(this.props);
     this.props.dispatch(addUser(this.props.restClient, this.state.user));
   }
 

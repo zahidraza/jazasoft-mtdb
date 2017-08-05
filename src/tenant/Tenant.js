@@ -6,7 +6,7 @@ import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Button from 'grommet/components/Button';
 
-class User extends Component {
+class Tenant extends Component {
 
   constructor () {
     super();
@@ -22,11 +22,8 @@ class User extends Component {
   render() {
     return (
       <Box>
-        <PageHeader title='User' 
-          searchControl={true}
-          onSearch={this._onSearch}
+        <PageHeader title='Tenant' 
           addControl={true}
-          filterControl={true}
           helpControl={true}
         />
 
@@ -38,6 +35,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({nfn: store.nfn});
+const select = (store) => ({tenant: store.tenant});
 
-export default withRouter(connect(select)(User));
+export default withRouter(connect(select)(Tenant));

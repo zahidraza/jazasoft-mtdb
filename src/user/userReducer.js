@@ -1,11 +1,12 @@
-import { USER_CREATE } from './userAction';
+import { USER_ADD } from './userAction';
 
 const initialState = {
-  users: []
+  users: [],
+  message: ''
 };
 
 const handlers = { 
-  [USER_CREATE]: (_, action) => ({})
+  [USER_ADD]: (_, action) => ({message: 'Hello'})
 };
 
 export default function testReducer (state = initialState, action) {
