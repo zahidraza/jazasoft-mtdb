@@ -4,6 +4,7 @@ import {
   TENANT_ADD_SUCCESS,
   TENANT_ADD_CANCEL 
 } from './tenantAction';
+const TENANT_INITIALIZED = 'TENANT_INITIALIZED';
 
 const initialState = {
   busy: false,
@@ -13,6 +14,7 @@ const initialState = {
 
 const handlers = { 
   [TENANT_BAD_REQUEST]: (_, action) => ({busy: false}),
+  [TENANT_INITIALIZED]: (_, action) => ({tenants: action.payload.tenants}),
   [TENANT_ADD_PROGRESS]: (_, action) => ({busy: true, adding: true}),
   [TENANT_ADD_SUCCESS]: (_, action) => {
     let tenants = {..._.tenants};

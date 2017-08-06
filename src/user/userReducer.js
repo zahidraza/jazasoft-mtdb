@@ -4,6 +4,7 @@ import {
   USER_ADD_SUCCESS,
   USER_ADD_CANCEL 
 } from './userAction';
+const USER_INITIALIZED = 'USER_INITIALIZED';
 
 const initialState = {
   busy: false,
@@ -13,6 +14,7 @@ const initialState = {
 
 const handlers = { 
   [USER_BAD_REQUEST]: (_, action) => ({busy: false}),
+  [USER_INITIALIZED]: (_, action) => ({users: action.payload.users}),
   [USER_ADD_PROGRESS]: (_, action) => ({busy: true, adding: true}),
   [USER_ADD_SUCCESS]: (_, action) => {
     let users = {..._.users};
