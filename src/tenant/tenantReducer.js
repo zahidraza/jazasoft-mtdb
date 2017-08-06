@@ -1,4 +1,5 @@
 import { 
+  TENANT_BAD_REQUEST,
   TENANT_ADD_PROGRESS, 
   TENANT_ADD_SUCCESS,
   TENANT_ADD_CANCEL 
@@ -11,6 +12,7 @@ const initialState = {
 };
 
 const handlers = { 
+  [TENANT_BAD_REQUEST]: (_, action) => ({busy: false}),
   [TENANT_ADD_PROGRESS]: (_, action) => ({busy: true, adding: true}),
   [TENANT_ADD_SUCCESS]: (_, action) => {
     let tenants = {..._.tenants};

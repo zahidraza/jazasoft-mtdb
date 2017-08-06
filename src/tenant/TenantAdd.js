@@ -29,12 +29,13 @@ class TenantAdd extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.tenant.adding) {
+    const {busy, adding} = nextProps.tenant;
+    if (!busy && !adding) {
       this.setState({tenant: {}});
+      this.props.history.push('/tenant');
     }
   }
   
-
   _addTenant () {
     this.props.dispatch(addTenant(this.props.restClient, this.state.tenant));
   }
@@ -48,13 +49,13 @@ class TenantAdd extends Component {
   _onCancel () {
     console.log(this.props.history);
     this.props.dispatch({type: TENANT_ADD_CANCEL});
-    this.props.history.goBack();
+    this.props.history.push('/tenant');
   }
 
 
   render() {
-    const { tenant, error } = this.state;
-    const { busy, adding } = this.props.tenant;
+    const { tenant} = this.state;
+    const { tenant: {busy}, err: {error} } = this.props;
     let _onAdd, _onCancel;
     if (!busy) {
       _onAdd = this._addTenant;
@@ -67,16 +68,16 @@ class TenantAdd extends Component {
           <Form >
             <FormHeader title='Add Tenant' busy={busy} /> 
             <FormFields>
-              <FormField label='Tenant Name' error={error.name}>
+              <FormField label='Tenant Name*' error={error.name}>
                 <input type='text' name='name' value={tenant.name == undefined ? '' : tenant.name} onChange={this._onChange} />
               </FormField>
               <FormField label='Description' error={error.description}>
                 <input type='text' name='description' value={tenant.description == undefined ? '' : tenant.description} onChange={this._onChange} />
               </FormField>
-              <FormField label='Address' error={error.address}>
+              <FormField label='Address*' error={error.address}>
                 <input type='email' name='address' value={tenant.address == undefined ? '' : tenant.address} onChange={this._onChange} />
               </FormField>
-              <FormField label='Database Name' error={error.dbName}>
+              <FormField label='Database Name*' error={error.dbName}>
                 <input type='text' name='dbName' value={tenant.dbName == undefined ? '': tenant.dbName} onChange={this._onChange} />
               </FormField>
             </FormFields>
@@ -92,7 +93,7 @@ class TenantAdd extends Component {
 }
 
 let select = (store) => {
-  return {tenant: store.tenant};
+  return {tenant: store.tenant, err: store.err};
 };
 
 export default withRouter(connect(select)(TenantAdd));
