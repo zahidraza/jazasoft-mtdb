@@ -27,6 +27,8 @@ export const addTenant = (restClient, tenant) => {
     .catch(error => {
       if (error.response.status == 400) {
         dispatch({type: TENANT_BAD_REQUEST});
+      } else {
+        dispatch({type: ROLE_ADD_CANCEL});
       }
     });
   };

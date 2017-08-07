@@ -99,6 +99,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({user: store.user});
+const select = (store) => ({user: store.users});
 
 export default withRouter(connect(select)(User));

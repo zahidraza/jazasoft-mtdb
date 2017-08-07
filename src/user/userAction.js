@@ -27,6 +27,8 @@ export const addUser = (restClient, user) => {
     .catch(error => {
       if (error.response.status == 400) {
         dispatch({type: USER_BAD_REQUEST});
+      } else {
+        dispatch({type: ROLE_ADD_CANCEL});
       }
     });
   };
