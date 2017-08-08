@@ -9,12 +9,13 @@ const ROLE_INITIALIZED = 'ROLE_INITIALIZED';
 const initialState = {
   busy: false,
   adding: false,
-  roles: {}
+  roles: {},
+  resources: []
 };
 
 const handlers = { 
   [ROLE_BAD_REQUEST]: (_, action) => ({busy: false}),
-  [ROLE_INITIALIZED]: (_, action) => ({roles: action.payload.roles}),
+  [ROLE_INITIALIZED]: (_, action) => ({roles: action.payload.roles, resources: action.payload.resources}),
   [ROLE_ADD_PROGRESS]: (_, action) => ({busy: true, adding: true}),
   [ROLE_ADD_SUCCESS]: (_, action) => {
     let roles = {..._.roles};
