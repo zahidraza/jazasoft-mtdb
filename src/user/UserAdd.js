@@ -40,7 +40,7 @@ class UserAdd extends Component {
     const {busy, adding} = nextProps.user;
     if (!busy && !adding) {
       this.setState({user: {}});
-      this.props.history.push('/users');
+      this.props.history.push('/user');
     }
   }
   
@@ -76,7 +76,7 @@ class UserAdd extends Component {
 
   _onCancel () {
     this.props.dispatch({type: CLEAR_ERROR});
-    this.props.history.push('/users');
+    this.props.history.push('/user');
   }
 
 
@@ -136,8 +136,8 @@ class UserAdd extends Component {
   }
 }
 
-let select = (store) => {
-  return {user: store.users, err: store.err, tenant: store.tenants};
+const select = (store) => {
+  return {user: store.user, err: store.err, tenant: store.tenant};
 };
 
 export default withRouter(connect(select)(UserAdd));

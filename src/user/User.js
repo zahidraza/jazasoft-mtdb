@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import {getRoles} from 'jazasoft/utils/utility';
+
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/components/PageHeader';
 import Button from 'grommet/components/Button';
@@ -30,14 +32,17 @@ class User extends Component {
   render() {
     const { user: { users }, tenant: { tenants }, role: { roles } } = this.props;
 
-    const headers = [
+    let headers = [
       {key: 'name', label: 'Full Name'},
       {key: 'username', label: 'Username'},
       {key: 'email', label: 'Email'},
       {key: 'role', label: 'Role'},
-      {key: 'mobile', label: 'Mobile'},
-      {key: 'company', label: 'Company'}
+      {key: 'mobile', label: 'Mobile'}
     ];
+
+    if (getRoles().includes('ROLE_MASTER')) {
+      headers.push({key: 'company', label: 'Company'})
+    }
 
     let data = [];
     for (let key in users) {
@@ -104,6 +109,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({user: store.users, tenant: store.tenants, role: store.roles});
+const select = (store) => ({user: store.user, tenant: store.tenant, role: store.role});
 
 export default withRouter(connect(select)(User));

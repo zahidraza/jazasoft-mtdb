@@ -64,7 +64,7 @@ class RoleAdd extends Component {
     const {busy, adding} = nextProps.role;
     if (!busy && !adding) {
       this.setState({role: {}});
-      this.props.history.push('/roles');
+      this.props.history.push('/role');
     }
   }
   
@@ -123,7 +123,7 @@ class RoleAdd extends Component {
 
   _onCancel () {
     this.props.dispatch({type: ROLE_ADD_CANCEL});
-    this.props.history.push('/roles');
+    this.props.history.push('/role');
   }
 
   _renderPermission () {
@@ -212,8 +212,8 @@ class RoleAdd extends Component {
   }
 }
 
-let select = (store) => {
-  return {role: store.roles, err: store.err};
+const select = (store) => {
+  return {role: store.role, err: store.err};
 };
 
 export default withRouter(connect(select)(RoleAdd));

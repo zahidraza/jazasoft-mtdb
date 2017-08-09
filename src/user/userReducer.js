@@ -4,6 +4,7 @@ import {
   USER_ADD_SUCCESS,
   USER_ADD_CANCEL 
 } from './userAction';
+import { USER_LOGOUT} from 'jazasoft/actions/authActions';
 const USER_INITIALIZED = 'USER_INITIALIZED';
 
 const initialState = {
@@ -21,7 +22,8 @@ const handlers = {
     users[action.payload.id] = action.payload.user;
     return {busy: false, adding: false, users};
   },
-  [USER_ADD_CANCEL]: (_, action) => ({busy: false, adding: false})
+  [USER_ADD_CANCEL]: (_, action) => ({busy: false, adding: false}),
+  [USER_LOGOUT]: (_, action) => ({users: {}})
 };
 
 export default function testReducer (state = initialState, action) {

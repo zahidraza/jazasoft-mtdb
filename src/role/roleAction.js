@@ -21,7 +21,6 @@ export const addRole = (restClient, role, permissions) => {
     let options = { data: role };
     restClient(CREATE, resource1, options, dispatch)
     .then(response => {
-      console.log(response);
       if (response.status == 201 || response.status == 200) {
         
         dispatch({type: ROLE_ADD_SUCCESS, payload: { id: response.data.id, role: response.data}});
@@ -62,7 +61,6 @@ export const addRole = (restClient, role, permissions) => {
         })
       }
     })
-    console.log(data);
 
     options = {data};
     restClient(CREATE, resource2, options, dispatch)

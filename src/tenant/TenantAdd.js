@@ -32,7 +32,7 @@ class TenantAdd extends Component {
     const {busy, adding} = nextProps.tenant;
     if (!busy && !adding) {
       this.setState({tenant: {}});
-      this.props.history.push('/tenants');
+      this.props.history.push('/tenant');
     }
   }
   
@@ -49,7 +49,7 @@ class TenantAdd extends Component {
   _onCancel () {
     console.log(this.props.history);
     this.props.dispatch({type: TENANT_ADD_CANCEL});
-    this.props.history.push('/tenants');
+    this.props.history.push('/tenant');
   }
 
 
@@ -92,8 +92,8 @@ class TenantAdd extends Component {
   }
 }
 
-let select = (store) => {
-  return {tenant: store.tenants, err: store.err};
+const select = (store) => {
+  return {tenant: store.tenant, err: store.err};
 };
 
 export default withRouter(connect(select)(TenantAdd));

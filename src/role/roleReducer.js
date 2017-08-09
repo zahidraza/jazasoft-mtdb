@@ -4,6 +4,7 @@ import {
   ROLE_ADD_SUCCESS,
   ROLE_ADD_CANCEL 
 } from './roleAction';
+import { USER_LOGOUT} from 'jazasoft/actions/authActions';
 const ROLE_INITIALIZED = 'ROLE_INITIALIZED';
 
 const initialState = {
@@ -22,7 +23,8 @@ const handlers = {
     roles[action.payload.id] = action.payload.role;
     return {busy: false, adding: false, roles};
   },
-  [ROLE_ADD_CANCEL]: (_, action) => ({busy: false, adding: false})
+  [ROLE_ADD_CANCEL]: (_, action) => ({busy: false, adding: false}),
+  [USER_LOGOUT]: (_, action) => ({roles: {}, resources: []})
 };
 
 export default function testReducer (state = initialState, action) {

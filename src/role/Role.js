@@ -23,10 +23,7 @@ class Role extends Component {
   render() {
     const { roles } = this.props.role;
 
-    const headers = [
-      {key: 'name', label: 'Role'},
-      {key: 'description', label: 'Description'}
-    ];
+    const headers = ['name', 'description'];
 
     let data = [];
     for (let key in roles) {
@@ -51,6 +48,6 @@ class Role extends Component {
   }
 }
 
-const select = (store) => ({role: store.roles});
+const select = (store) => ({role: store.role});
 
 export default withRouter(connect(select)(Role));

@@ -7,7 +7,7 @@ import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Button from 'grommet/components/Button';
 import Table from 'jazasoft/components/GTable';
 
-class Tenant extends Component {
+class ActivityName extends Component {
 
   constructor () {
     super();
@@ -21,35 +21,33 @@ class Tenant extends Component {
 
 
   render() {
-    const { tenants } = this.props.tenant;
+    const { activityNames } = this.props.activityName;
 
-    const headers = [
-      {key: 'name', label: 'Tenant'},
-      {key: 'dbName', label: 'Database'},
-      {key: 'address', label: 'Address'}
-    ];
+    const headers = ['name'];
 
     let data = [];
-    for (let key in tenants) {
-      if ({}.hasOwnProperty.call(tenants, key)) {
-        data.push({...tenants[key]});
+    for (let key in activityNames) {
+      if ({}.hasOwnProperty.call(activityNames, key)) {
+        data.push({...activityNames[key]});
       }
     }
+
     return (
       <Box>
-        <PageHeader title='Tenant' 
+        <PageHeader title='ActivityName' 
           addControl={true}
           helpControl={true}
         />
 
-        <Box margin='medium'>
-            <Table headers={headers}  data={data} />
+        <Box alignSelf='center' size='medium' margin='medium'>
+            <Table headers={headers}  data={data} container='list' />
         </Box>
+        
       </Box>
     );
   }
 }
 
-const select = (store) => ({tenant: store.tenant});
+const select = (store) => ({activityName: store.activityName});
 
-export default withRouter(connect(select)(Tenant));
+export default withRouter(connect(select)(ActivityName));
