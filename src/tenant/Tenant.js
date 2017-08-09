@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Button from 'grommet/components/Button';
+import Table from 'jazasoft/components/GTable';
 
 class Tenant extends Component {
 
@@ -20,6 +21,20 @@ class Tenant extends Component {
 
 
   render() {
+    const { tenants } = this.props.tenant;
+
+    const headers = [
+      {key: 'name', label: 'Tenant'},
+      {key: 'dbName', label: 'Database'},
+      {key: 'address', label: 'Address'}
+    ];
+
+    let data = [];
+    for (let key in tenants) {
+      if ({}.hasOwnProperty.call(tenants, key)) {
+        data.push({...tenants[key]});
+      }
+    }
     return (
       <Box>
         <PageHeader title='Tenant' 
@@ -27,8 +42,8 @@ class Tenant extends Component {
           helpControl={true}
         />
 
-        <Box>
-
+        <Box margin='medium'>
+            <Table headers={headers}  data={data} />
         </Box>
       </Box>
     );

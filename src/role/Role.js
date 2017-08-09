@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Button from 'grommet/components/Button';
+import Table from 'jazasoft/components/GTable';
 
 class Role extends Component {
 
@@ -20,6 +21,20 @@ class Role extends Component {
 
 
   render() {
+    const { roles } = this.props.role;
+
+    const headers = [
+      {key: 'name', label: 'Role'},
+      {key: 'description', label: 'Description'}
+    ];
+
+    let data = [];
+    for (let key in roles) {
+      if ({}.hasOwnProperty.call(roles, key)) {
+        data.push({...roles[key]});
+      }
+    }
+
     return (
       <Box>
         <PageHeader title='Role' 
@@ -27,8 +42,8 @@ class Role extends Component {
           helpControl={true}
         />
 
-        <Box>
-          
+        <Box alignSelf='center' size='large' margin='medium'>
+            <Table headers={headers}  data={data} container='list' />
         </Box>
         
       </Box>

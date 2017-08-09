@@ -71,7 +71,7 @@ class RoleAdd extends Component {
   _addRole () {
     const {permission , role} = this.state;
     if (permission.selectedItems.length == 0) {
-      const result = confirm('No Permission granted to "' + role + '". Are you sure?');
+      const result = confirm('No Permission granted to "' + role.name + '". Are you sure?');
       if (!result) return;
     }
     this.props.dispatch(addRole(this.props.restClient, this.state.role, permission.selectedItems));

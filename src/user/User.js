@@ -3,12 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from 'grommet/components/Box';
-import PageHeader from 'jazasoft/lib/components/PageHeader';
+import PageHeader from 'jazasoft/components/PageHeader';
 import Button from 'grommet/components/Button';
-import Table from 'grommet/components/Table';
-import TableRow from 'grommet/components/TableRow';
-import TableHeader from 'grommet/components/TableHeader';
-
+import Table from 'jazasoft/components/GTable';
 import Filter from 'jazasoft/components/Filter';
 
 class User extends Component {
@@ -31,42 +28,52 @@ class User extends Component {
   }
 
   render() {
+    const { user: { users }, tenant: { tenants }, role: { roles } } = this.props;
 
-    const { users } = this.props.user;
+    const headers = [
+      {key: 'name', label: 'Full Name'},
+      {key: 'username', label: 'Username'},
+      {key: 'email', label: 'Email'},
+      {key: 'role', label: 'Role'},
+      {key: 'mobile', label: 'Mobile'},
+      {key: 'company', label: 'Company'}
+    ];
 
-    const items = Object.keys(users).map(key => {
-      const user = users[key];
-      return (
-        <TableRow key={key}  >
-          <td >{user.name}</td>
-          <td >{user.username}</td>
-          <td >{user.email}</td>
-          <td >{user.mobile}</td>
-          {/* <td style={{textAlign: 'right', padding: 0}}>
-            <Button icon={<View />} onClick={this._onViewClick.bind(this,index)} />
-            <Button icon={<Edit />} onClick={this._onEditClick.bind(this,index)} />
-            <Button icon={<Trash />} onClick={this._onRemoveClick.bind(this,index)} />
-          </td> */}
-        </TableRow>
-      );
-    });
+    let data = [];
+    for (let key in users) {
+      if ({}.hasOwnProperty.call(users, key)) {
+        const user = users[key];
+        const company = (user.company != undefined) ? user.company.name : '';
+        let role = '';
+        user.authorities.forEach(a => role += a.authority + ',');
+        role = role.substr(0,role.length-1);
+        data.push({...user, company, role});
+      }
+    }
+
+    let tenantItems = [];
+    for (let key in tenants) {
+      if ({}.hasOwnProperty.call(tenants, key)) {
+        tenantItems.push(tenants[key].name);
+      }
+    }
+
+    let roleItems = [];
+    for (let key in roles) {
+      if ({}.hasOwnProperty.call(roles, key)) {
+        roleItems.push(roles[key].name);
+      }
+    }
+
 
     const filterItems = [
       {
-        label: 'Role',
-        elements: [
-          {label: 'Role Master', value: 'ROLE_MASTER'}, 
-          'ROLE_ADMIN',
-          'ROLE_OTHER'
-        ]
+        label: 'company',
+        elements: tenantItems
       },
       {
-        label: 'Company',
-        inline: false,
-        elements: [
-          {label: 'Jaza Software', value: 'jaza-soft'},
-          {label: 'Laguna Clothing', value: 'laguna-clothing'}
-        ]
+        label: 'role',
+        elements: roleItems
       }
     ];
 
@@ -81,13 +88,11 @@ class User extends Component {
           helpControl={true}
         />
         <Box>
+
           <Box margin='medium'>
-            <Table>
-                <TableHeader labels={['Full Name', 'Username', 'Email', 'Mobile']} />
-                
-                <tbody>{items}</tbody>
-            </Table> 
+            <Table headers={headers}  data={data} />
           </Box>
+
           <Filter
             active={this.state.filterActive}
             onClose={this._toggleFilter}
@@ -99,6 +104,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({user: store.users});
+const select = (store) => ({user: store.users, tenant: store.tenants, role: store.roles});
 
 export default withRouter(connect(select)(User));
