@@ -145,7 +145,7 @@ class RoleAdd extends Component {
     });
 
     return (
-      <fieldset>
+      <fieldset >
         <Box direction='row' justify='between'>
           <Box alignSelf='center'><Heading strong={true} tag='h3' >Role Permissions</Heading></Box>
           <Button icon={<AddIcon />} onClick={this._toggleDailog}/>

@@ -7,7 +7,7 @@ import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Button from 'grommet/components/Button';
 import Table from 'jazasoft/components/GTable';
 
-class UserGroup extends Component {
+class Buyer extends Component {
 
   constructor () {
     super();
@@ -21,20 +21,20 @@ class UserGroup extends Component {
 
 
   render() {
-    const { userGroups } = this.props.group;
+    const { buyers } = this.props.buyer;
 
     const headers = ['name'];
 
     let data = [];
-    for (let key in userGroups) {
-      if ({}.hasOwnProperty.call(userGroups, key)) {
-        data.push({...userGroups[key]});
+    for (let key in buyers) {
+      if ({}.hasOwnProperty.call(buyers, key)) {
+        data.push({...buyers[key]});
       }
     }
 
     return (
       <Box>
-        <PageHeader title='UserGroup' 
+        <PageHeader title='Buyer' 
           addControl={true}
           helpControl={true}
         />
@@ -48,6 +48,6 @@ class UserGroup extends Component {
   }
 }
 
-const select = (store) => ({group: store.group});
+const select = (store) => ({buyer: store.buyer});
 
-export default withRouter(connect(select)(UserGroup));
+export default withRouter(connect(select)(Buyer));

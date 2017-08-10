@@ -66,10 +66,10 @@ class UserGroupAdd extends Component {
   
 
   componentWillReceiveProps(nextProps) {
-    const {busy, adding} = nextProps.userGroup;
+    const {busy, adding} = nextProps.group;
     if (!busy && !adding) {
       this.setState({userGroup: {}});
-      this.props.history.push('/userGroup');
+      this.props.history.push('/group');
     }
   }
   
@@ -129,7 +129,7 @@ class UserGroupAdd extends Component {
 
   _onCancel () {
     this.props.dispatch({type: USER_GROUP_ADD_CANCEL});
-    this.props.history.push('/userGroup');
+    this.props.history.push('/group');
   }
 
   _renderActivity () {
@@ -148,7 +148,7 @@ class UserGroupAdd extends Component {
     });
 
     return (
-      <fieldset>
+      <fieldset key={index}>
         <Box direction='row' justify='between'>
           <Box alignSelf='center'><Heading strong={true} tag='h3' >User Group Activity Access</Heading></Box>
           <Button icon={<AddIcon />} onClick={this._toggleDailog}/>
@@ -162,7 +162,7 @@ class UserGroupAdd extends Component {
 
   render() {
     const { userGroup, activity} = this.state;
-    const { userGroup: {busy, resources}, err: {error} } = this.props;
+    const { group: {busy, resources}, err: {error} } = this.props;
     let _onAdd, _onCancel;
     if (!busy) {
       _onAdd = this._addUserGroup;
@@ -213,7 +213,7 @@ class UserGroupAdd extends Component {
 }
 
 const select = (store) => {
-  return {userGroup: store.userGroup, activityName: store.activityName, err: store.err};
+  return {group: store.group, activityName: store.activityName, err: store.err};
 };
 
 export default withRouter(connect(select)(UserGroupAdd));

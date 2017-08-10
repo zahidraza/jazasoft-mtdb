@@ -11,6 +11,7 @@ export const USER_ADD_SUCCESS = 'USER_ADD_SUCCESS';
 export const USER_ADD_CANCEL = 'USER_ADD_CANCEL';
 
 export const addUser = (restClient, user) => {
+  user = {...user, companyId: user.companyId.value, roles: user.roles.value};
   const options = { data: user };
 
   return (dispatch) => {

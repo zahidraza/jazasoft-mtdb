@@ -15,7 +15,8 @@ class User extends Component {
   constructor () {
     super();
     this.state = {
-      filterActive: false
+      filterActive: false,
+      checked: false
     };
     this._onSearch = this._onSearch.bind(this);
     this._toggleFilter = this._toggleFilter.bind(this);
@@ -92,18 +93,15 @@ class User extends Component {
           onFilter={this._toggleFilter}
           helpControl={true}
         />
-        <Box>
 
-          <Box margin='medium'>
-            <Table headers={headers}  data={data} />
-          </Box>
-
-          <Filter
-            active={this.state.filterActive}
-            onClose={this._toggleFilter}
-            filterItems={filterItems}/> 
-
+        <Box margin='medium'>
+          <Table headers={headers}  data={data} />
         </Box>
+
+        <Filter
+          active={this.state.filterActive}
+          onClose={this._toggleFilter}
+          filterItems={filterItems}/> 
       </Box>
     );
   }
