@@ -10,8 +10,8 @@ export const TENANT_ADD_CANCEL = 'TENANT_ADD_CANCEL';
 
 const resource = 'companies';
 
-export const addTenant = (restClient, tenant) => {
-  const options = { data: tenant };
+export const addTenant = (restClient, formData) => {
+  const options = { data: formData };
 
   return (dispatch) => {
     dispatch({type: TENANT_ADD_PROGRESS});

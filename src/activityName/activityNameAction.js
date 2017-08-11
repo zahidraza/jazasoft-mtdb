@@ -10,13 +10,13 @@ export const ACTIVITY_NAME_ADD_CANCEL = 'ACTIVITY_NAME_ADD_CANCEL';
 
 const resource = 'activityNames';
 
-export const addActivityName = (restClient, activityName) => {
+export const addActivityName = (restClient, formData) => {
   
 
   return (dispatch) => {
     dispatch({type: ACTIVITY_NAME_ADD_PROGRESS});
 
-    let options = { data: activityName };
+    let options = { data: formData };
     restClient(CREATE, resource, options, dispatch)
     .then(response => {
       console.log(response);

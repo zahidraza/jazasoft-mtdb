@@ -6,7 +6,6 @@ import {getRoles} from 'jazasoft/utils/utility';
 
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/components/PageHeader';
-import Button from 'grommet/components/Button';
 import Table from 'jazasoft/components/GTable';
 import Filter from 'jazasoft/components/Filter';
 
