@@ -27,7 +27,7 @@ class RoleAdd extends Component {
   
   _addRole () {
     const { formData } = this.props.form;
-    if (formData.permissions == undefined || formData.permissions.length == 0) {
+    if (formData.collections == undefined || formData.collections.length == 0) {
       const result = confirm('No Permission granted to "' + formData.name + '". Are you sure?');
       if (!result) return;
     }
@@ -78,15 +78,17 @@ class RoleAdd extends Component {
       <Box>
         <Form title='Add Role'
           width='large'
-          data={data}
-          busy={busy}
-          secondaryTitle='Add Permissions'
-          elements={elements}
-          collectionKey='permissions'
-          collectionItems={resources}
           submitControl={true}
           onSubmit={this._addRole}
           onCancel={this._onCancel}
+          data={data}
+          busy={busy}
+
+          secondaryTitle='Add Permissions'
+          dialogPlaceholder='Select Permission'
+          elements={elements}
+          collectionItems={resources}
+          container='list'
         />
       </Box>
     );
