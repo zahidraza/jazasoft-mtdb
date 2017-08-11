@@ -11,9 +11,20 @@ export const ROLE_ADD_CANCEL = 'ROLE_ADD_CANCEL';
 const resource1 = 'roles';
 const resource2 = 'interceptors';
 
-export const addRole = (restClient, role, permissions) => {
+export const addRole = (restClient, formData) => {
   
-
+  let role = {name: formData.name, description: formData.description};
+  let {data, ...restData} = formData.permissions
+  let permissions = formData.permissions.map(p => {
+    const {data, ...restData} = p;
+    let dynamicData = {};
+    data.forEach(d => {
+      dynamicData[d.name] = d.value;
+    })
+    return {...restData, ...dynamicData};
+  })
+  console.log(permissions);
+  
   return (dispatch) => {
     dispatch({type: ROLE_ADD_PROGRESS});
     let noOfRequests = 0;

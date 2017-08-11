@@ -148,7 +148,7 @@ class UserGroupAdd extends Component {
     });
 
     return (
-      <fieldset key={index}>
+      <fieldset >
         <Box direction='row' justify='between'>
           <Box alignSelf='center'><Heading strong={true} tag='h3' >User Group Activity Access</Heading></Box>
           <Button icon={<AddIcon />} onClick={this._toggleDailog}/>
