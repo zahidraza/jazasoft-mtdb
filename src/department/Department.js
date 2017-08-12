@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { denormalise } from 'jazasoft/utils/utility';
+
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/lib/components/PageHeader';
 import Table from 'jazasoft/components/GTable';
 
-class ActivityName extends Component {
+class Department extends Component {
 
   constructor () {
     super();
@@ -20,20 +22,17 @@ class ActivityName extends Component {
 
 
   render() {
-    const { activityNames } = this.props.activityName;
+    const { departments } = this.props.department;
 
     const headers = ['name'];
 
-    let data = [];
-    for (let key in activityNames) {
-      if ({}.hasOwnProperty.call(activityNames, key)) {
-        data.push({...activityNames[key]});
-      }
-    }
+    let data = denormalise(departments);
+
+    console.log(data);
 
     return (
       <Box>
-        <PageHeader title='Activity' 
+        <PageHeader title='Department' 
           addControl={true}
           helpControl={true}
         />
@@ -47,6 +46,6 @@ class ActivityName extends Component {
   }
 }
 
-const select = (store) => ({activityName: store.activityName});
+const select = (store) => ({department: store.department});
 
-export default withRouter(connect(select)(ActivityName));
+export default withRouter(connect(select)(Department));

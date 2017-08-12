@@ -37,16 +37,6 @@ class UserAdd extends Component {
   _addUser () {
     const { role } = this.state;
     let { formData, collectionData } = this.props.form;
-    if (role.length == 1 && role.includes('ROLE_MASTER')) {
-      if (formData.companyId == undefined) {
-        alert('Select Tenant');
-        return;
-      }
-      if (collectionData.length == 0) {
-        alert('Add User Role');
-        return;
-      }
-    }
 
     if (role.length == 1 && role.includes('ROLE_ADMIN')) {
       if (formData.groupId == undefined) {
@@ -54,17 +44,10 @@ class UserAdd extends Component {
         return;
       }
 
-      if (collectionData.length == 0) {
-        alert('Add User Role');
+      if (collectionData[0] == undefined || collectionData[0].length == 0) {
+        alert('Add Buyer Access');
         return;
-      } else if (collectionData[0] != undefined && collectionData[0].length == 0) {
-        alert('Add User Role');
-        return;
-      } else if (collectionData[0] != undefined && collectionData[0].length == 0) {
-        alert('Add Buyer Permission');
-        return;
-      }
-
+      } 
     }
 
     this.props.dispatch(addUser(this.props.restClient, formData, collectionData));
@@ -80,15 +63,15 @@ class UserAdd extends Component {
     const { 
       user: {busy}, 
       tenant: {tenants}, 
-      role: {roles}, 
       buyer: {buyers},
-      group: {userGroups} 
+      department: {departments} 
     } = this.props;
     const { role } = this.state;
 
     const tenantOptions = denormalise(tenants).map(t => ({label: t.name, value: t.id}));
-    const groupOptions = denormalise(userGroups).map(ug => ({label: ug.name, value: ug.id}));
+    const deptOptions = denormalise(departments).map(ug => ({label: ug.name, value: ug.id}));
 
+    console.log(deptOptions);
     //Basic Form Data
     let data = [
       {
@@ -117,24 +100,7 @@ class UserAdd extends Component {
       }
     ];
 
-    //Construct Role Collection Data
-    const roleItems = denormalise(roles).map(r => r.name);
-    const roleElements = [
-      {
-        type: 'label',
-        name: 'role',
-      }
-    ];
-
-    let collectionData = [
-      {
-        collectionItems: roleItems,
-        elements: roleElements,
-        container: 'list',
-        secondaryTitle: 'Add User Role',
-        dialogPlaceholder: 'Select Role'
-      }
-    ];
+    let collectionData = [];
 
     if (role.length == 1 && role.includes('ROLE_MASTER')) {
       const tenantElement = {
@@ -158,15 +124,14 @@ class UserAdd extends Component {
         elements: [
           {
             elementType: 'select',
-            label: 'User Group*',
+            label: 'Department*',
             name: 'groupId',
-            placeholder: 'Select User Group',
-            options: groupOptions
+            placeholder: 'Select Department',
+            options: deptOptions
           }
         ]
       };
 
-      //Construct Role Collection Data
       const buyerItems = denormalise(buyers);
       const buyerElements = [
         {
@@ -207,9 +172,8 @@ const select = (store) => {
     form: store.form, 
     user: store.user, 
     tenant: store.tenant, 
-    role: store.role,
     buyer: store.buyer,
-    group: store.group
+    department: store.department
   };
 };
 

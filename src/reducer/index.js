@@ -4,3 +4,4 @@ export {default as roleReducer} from '../role/roleReducer';
 export {default as activityNameReducer} from '../activityName/activityNameReducer';
 export {default as userGroupReducer} from '../userGroup/userGroupReducer';
 export {default as buyerReducer} from '../buyer/buyerReducer';
+export {default as departmentReducer} from '../department/departmentReducer';

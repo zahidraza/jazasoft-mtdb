@@ -1,4 +1,4 @@
 export {default as activityNameReducer} from './activityNameReducer';
 export {default as activityNameAction} from './activityNameAction';
-export {default as ActivityName} from './activityName';
-export {default as ActivityNameAdd} from './activityNameAdd';
+export {default as ActivityName} from './ActivityName';
+export {default as ActivityNameAdd} from './ActivityNameAdd';

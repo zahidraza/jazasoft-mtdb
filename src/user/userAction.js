@@ -19,25 +19,29 @@ export const addUser = (restClient, formData, collectionData) => {
     let noOfRequest = 0;
 
     const collections = getCollectionData(collectionData);
-    let roles = getCsvFromArray(collections[0].map(r => r.role));
-    roles = roles.replace(new RegExp('ROLE_', 'g'), '');
-    
-    let user = {...formData, roles};
+    let roles;
+    let user = {...formData};
 
     const role = getRoles();
     if (role.length == 1 && role.includes('ROLE_MASTER')) {
       noOfRequest = 1;
-      user = {...user, companyId: formData.companyId.value};
-      
+      let companyId;
+      if (formData.companyId == undefined) {
+        roles = 'MASTER';
+      } else {
+        roles = 'ADMIN';
+        companyId = formData.companyId.value;
+      }
+      user = {...user, roles, companyId};
     }
-    const options = {data: user};
-
+    
     let addUserPermission;
     if (role.length == 1 && role.includes('ROLE_ADMIN')) {
       noOfRequest = 2;
+      roles = formData.groupId.label;
 
       addUserPermission = (dispatch, restClient, userId, formData, collections) => {
-        const buyerList = collections[1].map(b => b.id);
+        const buyerList = collections[0].map(b => b.id);
         const tUser = {groupId: formData.groupId.value, buyerList};
         const options = {id: userId, data: tUser};
 
@@ -57,7 +61,8 @@ export const addUser = (restClient, formData, collectionData) => {
         });
       }
     }
-
+    user = {...user, roles};
+    const options = {data: user};
 
     dispatch({type: USER_ADD_PROGRESS});
     restClient(CREATE, resource1, options, dispatch)
@@ -81,12 +86,5 @@ export const addUser = (restClient, formData, collectionData) => {
         dispatch({type: USER_ADD_CANCEL});
       }
     });
-
-
-
-
-
-
-
   };
 };

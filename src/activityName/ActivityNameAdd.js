@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 
+import { denormalise } from 'jazasoft/utils/utility';
 import { addActivityName, ACTIVITY_NAME_ADD_CANCEL } from './activityNameAction';
 
 import Box from 'grommet/components/Box';
 import Form from 'jazasoft/components/GForm';
-
-import Dialog from 'jazasoft/components/Dailog';
 
 class ActivityNameAdd extends Component {
 
@@ -27,8 +26,12 @@ class ActivityNameAdd extends Component {
   }
   
   _addActivityName () {
-    const {formData} = this.props.form;
-    this.props.dispatch(addActivityName(this.props.restClient, formData));
+    const {formData, collectionData} = this.props.form;
+    if (collectionData[0] == undefined || collectionData[0].length == 0) {
+      const result = confirm('No Department added for "' + formData.name + '". Are you sure?');
+      if (!result) return;
+    }
+    this.props.dispatch(addActivityName(this.props.restClient, formData, collectionData));
   }
 
   _onCancel () {
@@ -37,7 +40,7 @@ class ActivityNameAdd extends Component {
   }
 
   render() {
-    const { activityName: {busy}} = this.props;
+    const { activityName: {busy}, department: { departments }} = this.props;
     const data = [
       {
         elements: [
@@ -50,6 +53,23 @@ class ActivityNameAdd extends Component {
       }
     ];
 
+    const departmentItems = denormalise(departments);
+    const departmentElements = [
+      {
+        type: 'label',
+        name: 'dept',
+      }
+    ];
+    const collectionData = [
+      {
+        collectionItems: departmentItems,
+        elements: departmentElements,
+        container: 'list',
+        secondaryTitle: 'Add Department',
+        dialogPlaceholder: 'Select Department'
+      }
+    ];
+
     return (
       <Box>
         <Form title='Add Activity Name'
@@ -58,6 +78,7 @@ class ActivityNameAdd extends Component {
           submitControl={true}
           onSubmit={this._addActivityName}
           onCancel={this._onCancel}
+          collectionData={collectionData}
         />
       </Box>
     );
@@ -65,7 +86,7 @@ class ActivityNameAdd extends Component {
 }
 
 const select = (store) => {
-  return {activityName: store.activityName, form: store.form};
+  return {activityName: store.activityName, department: store.department, form: store.form};
 };
 
 export default withRouter(connect(select)(ActivityNameAdd));

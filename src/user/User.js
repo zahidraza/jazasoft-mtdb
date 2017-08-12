@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import {getRoles} from 'jazasoft/utils/utility';
+import {getRoles, denormalise} from 'jazasoft/utils/utility';
 
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/components/PageHeader';
@@ -30,13 +30,13 @@ class User extends Component {
   }
 
   render() {
-    const { user: { users }, tenant: { tenants }, role: { roles } } = this.props;
+    const { user: { users }, tenant: { tenants }, department: {roles}} = this.props;
 
     let headers = [
       {key: 'name', label: 'Full Name'},
       {key: 'username', label: 'Username'},
       {key: 'email', label: 'Email'},
-      {key: 'role', label: 'Role'},
+      {key: 'role', label: 'Department'},
       {key: 'mobile', label: 'Mobile'}
     ];
 
@@ -52,24 +52,14 @@ class User extends Component {
         let role = '';
         user.authorities.forEach(a => role += a.authority + ',');
         role = role.substr(0,role.length-1);
+        role = role.replace(new RegExp('ROLE_', 'g'), '');
         data.push({...user, company, role});
       }
     }
 
-    let tenantItems = [];
-    for (let key in tenants) {
-      if ({}.hasOwnProperty.call(tenants, key)) {
-        tenantItems.push(tenants[key].name);
-      }
-    }
+    let tenantItems = denormalise(tenants).map(t => t.name);
 
-    let roleItems = [];
-    for (let key in roles) {
-      if ({}.hasOwnProperty.call(roles, key)) {
-        roleItems.push(roles[key].name);
-      }
-    }
-
+    let roleItems = denormalise(roles).map(r => r.name);
 
     const filterItems = [
       {
@@ -77,7 +67,7 @@ class User extends Component {
         elements: tenantItems
       },
       {
-        label: 'role',
+        label: 'department',
         elements: roleItems
       }
     ];
@@ -106,6 +96,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({user: store.user, tenant: store.tenant, role: store.role});
+const select = (store) => ({user: store.user, tenant: store.tenant, department: store.department});
 
 export default withRouter(connect(select)(User));
