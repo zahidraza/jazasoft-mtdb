@@ -1,6 +1,7 @@
 import { CREATE, UPDATE } from 'jazasoft/rest/types';
 import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
 import { SHOW_SNACKBAR } from 'jazasoft/actions/notificationActions';
+import { getCollectionData } from 'jazasoft/utils/utility';
 
 export const USER_GROUP_BAD_REQUEST = 'USER_GROUP_BAD_REQUEST';
 
@@ -10,8 +11,13 @@ export const USER_GROUP_ADD_CANCEL = 'USER_GROUP_ADD_CANCEL';
 
 const resource = 'groups';
 
-export const addUserGroup = (restClient, userGroup) => {
-  
+export const addUserGroup = (restClient, formData, collectionData) => {
+
+  //process collection data
+  const collections = getCollectionData(collectionData);
+  const activities = collections[0].map(c => c.activity);
+  //combine both data
+  const userGroup = {...formData, activities};
 
   return (dispatch) => {
     dispatch({type: USER_GROUP_ADD_PROGRESS});

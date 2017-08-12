@@ -1,6 +1,7 @@
 import { CREATE, UPDATE } from 'jazasoft/rest/types';
 import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
 import { SHOW_SNACKBAR } from 'jazasoft/actions/notificationActions';
+import { getCollectionData } from 'jazasoft/utils/utility';
 
 export const ROLE_BAD_REQUEST = 'ROLE_BAD_REQUEST';
 
@@ -11,18 +12,11 @@ export const ROLE_ADD_CANCEL = 'ROLE_ADD_CANCEL';
 const resource1 = 'roles';
 const resource2 = 'interceptors';
 
-export const addRole = (restClient, formData) => {
-  
-  let role = {name: formData.name, description: formData.description};
-  let permissions = formData.collections.map(p => {
-    const {data, ...restData} = p;
-    let dynamicData = {};
-    data.forEach(d => {
-      dynamicData[d.name] = d.value;
-    });
-    return {...restData, ...dynamicData};
-  });
-  console.log(permissions);
+export const addRole = (restClient, formData, collectionData) => {
+
+  const collections = getCollectionData(collectionData);
+  const collection = collections[0];
+  let role = {...formData};
 
   return (dispatch) => {
     dispatch({type: ROLE_ADD_PROGRESS});
@@ -50,7 +44,7 @@ export const addRole = (restClient, formData) => {
     });
 
     let data = [];
-    permissions.forEach(p => {
+    collection.forEach(p => {
       if (p.readOnly) {
         p.api.forEach(a => {
           data.push({url: a, httpMethod: 'GET', access: 'ROLE_' + role.name});

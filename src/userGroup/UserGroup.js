@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/lib/components/PageHeader';
-import Button from 'grommet/components/Button';
 import Table from 'jazasoft/components/GTable';
 
 class UserGroup extends Component {
@@ -34,7 +33,7 @@ class UserGroup extends Component {
 
     return (
       <Box>
-        <PageHeader title='UserGroup' 
+        <PageHeader title='User Group' 
           addControl={true}
           helpControl={true}
         />
