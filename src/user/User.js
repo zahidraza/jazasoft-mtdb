@@ -32,16 +32,10 @@ class User extends Component {
   render() {
     const { user: { users }, tenant: { tenants }, department: {roles}} = this.props;
 
-    let headers = [
-      {key: 'name', label: 'Full Name'},
-      {key: 'username', label: 'Username'},
-      {key: 'email', label: 'Email'},
-      {key: 'role', label: 'Department'},
-      {key: 'mobile', label: 'Mobile'}
-    ];
+    let headers = ['name', 'username', 'email', 'role', 'mobile'];
 
     if (getRoles().includes('ROLE_MASTER')) {
-      headers.push({key: 'company', label: 'Company'})
+      headers.push('company');
     }
 
     let data = [];
@@ -83,9 +77,9 @@ class User extends Component {
           helpControl={true}
         />
 
-        <Box margin='medium'>
-          <Table headers={headers}  data={data} />
-        </Box>
+        <Table width={{width: {min: 'xxlarge', max: 'full'}}}
+            headers={headers}  
+            data={data} />
 
         <Filter
           active={this.state.filterActive}
