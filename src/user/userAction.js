@@ -41,7 +41,7 @@ export const addUser = (restClient, formData, collectionData) => {
       roles = formData.groupId.label;
 
       addUserPermission = (dispatch, restClient, userId, formData, collections) => {
-        const buyerList = collections[0].map(b => b.id);
+        const buyerList = collections[0].map(b => b.buyer);
         const tUser = {groupId: formData.groupId.value, buyerList};
         const options = {id: userId, data: tUser};
 

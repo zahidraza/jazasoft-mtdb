@@ -41,9 +41,7 @@ class Tenant extends Component {
           helpControl={true}
         />
 
-        <Box margin='medium'>
-            <Table headers={headers}  data={data} />
-        </Box>
+        <Table headers={headers}  data={data} width='xlarge' />
       </Box>
     );
   }
