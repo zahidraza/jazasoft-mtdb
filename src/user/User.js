@@ -15,12 +15,35 @@ class User extends Component {
     super();
     this.state = {
       filterActive: false,
-      checked: false
+      checked: false,
+      data: []
     };
     this._onSearch = this._onSearch.bind(this);
     this._toggleFilter = this._toggleFilter.bind(this);
+    this._onClick = this._onClick.bind(this);
+    this._loadData = this._loadData.bind(this);
   }
 
+  componentWillMount() {
+    this._loadData(this.props.user.users);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this._loadData(nextProps.user.users);
+  }
+
+  _loadData (users) {
+    const data = denormalise(users).map(user => {
+      const company = (user.company != undefined) ? user.company.name : '';
+      let role = '';
+      user.authorities.forEach(a => role += a.authority + ',');
+      role = role.substr(0,role.length-1);
+      role = role.replace(new RegExp('ROLE_', 'g'), '');
+      return {...user, company, role};
+    });
+    this.setState({data});
+  }
+  
   _onSearch () {
     console.log('onSearch');
   }
@@ -29,26 +52,22 @@ class User extends Component {
     this.setState({filterActive: !this.state.filterActive});
   }
 
+  _onClick (action, index) {
+    const id = this.state.data[index].id;
+    if (action == 'read') {
+      this.props.history.push('/user/' + id + '/view');
+    } else if (action == 'update') {
+      this.props.history.push('/user/' + id + '/edit');
+    }
+  }
+
   render() {
-    const { user: { users }, tenant: { tenants }, department: {roles}} = this.props;
+    const { user: { users }, tenant: { tenants }, role: {roles}} = this.props;
 
     let headers = ['name', 'username', 'email', 'role', 'mobile'];
 
     if (getRoles().includes('ROLE_MASTER')) {
       headers.push('company');
-    }
-
-    let data = [];
-    for (let key in users) {
-      if ({}.hasOwnProperty.call(users, key)) {
-        const user = users[key];
-        const company = (user.company != undefined) ? user.company.name : '';
-        let role = '';
-        user.authorities.forEach(a => role += a.authority + ',');
-        role = role.substr(0,role.length-1);
-        role = role.replace(new RegExp('ROLE_', 'g'), '');
-        data.push({...user, company, role});
-      }
     }
 
     let tenantItems = denormalise(tenants).map(t => t.name);
@@ -61,7 +80,7 @@ class User extends Component {
         elements: tenantItems
       },
       {
-        label: 'department',
+        label: 'role',
         elements: roleItems
       }
     ];
@@ -77,9 +96,10 @@ class User extends Component {
           helpControl={true}
         />
 
-        <Table width={{width: {min: 'xxlarge', max: 'full'}}}
+        <Table scope='read,update'
             headers={headers}  
-            data={data} />
+            data={this.state.data}
+            onClick={this._onClick} />
 
         <Filter
           active={this.state.filterActive}
@@ -90,6 +110,6 @@ class User extends Component {
   }
 }
 
-const select = (store) => ({user: store.user, tenant: store.tenant, department: store.department});
+const select = (store) => ({user: store.user, tenant: store.tenant, role: store.role});
 
 export default withRouter(connect(select)(User));

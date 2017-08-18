@@ -20,11 +20,9 @@ class UserAdd extends Component {
     this._onCancel = this._onCancel.bind(this);
   }
 
-  
   componentWillMount() {
     this.setState({role: getRoles()});
   }
-  
 
   componentWillReceiveProps(nextProps) {
     const {user: {busy, adding}, form: {toggleForm}} = nextProps;
@@ -64,14 +62,13 @@ class UserAdd extends Component {
       user: {busy}, 
       tenant: {tenants}, 
       buyer: {buyers},
-      department: {departments} 
+      role: {roles} 
     } = this.props;
     const { role } = this.state;
 
     const tenantOptions = denormalise(tenants).map(t => ({label: t.name, value: t.id}));
-    const deptOptions = denormalise(departments).map(ug => ({label: ug.name, value: ug.id}));
+    const roleOptions = denormalise(roles).map(ug => ({label: ug.name, value: ug.id}));
 
-    console.log(deptOptions);
     //Basic Form Data
     let data = [
       {
@@ -124,10 +121,10 @@ class UserAdd extends Component {
         elements: [
           {
             elementType: 'select',
-            label: 'Department*',
+            label: 'Role*',
             name: 'groupId',
-            placeholder: 'Select Department',
-            options: deptOptions
+            placeholder: 'Select Role',
+            options: roleOptions
           }
         ]
       };
@@ -136,6 +133,7 @@ class UserAdd extends Component {
       const buyerElements = [
         {
           type: 'label',
+          key: 'name',
           name: 'buyer',
         }
       ];
@@ -154,14 +152,16 @@ class UserAdd extends Component {
 
     return (
       <Box>
-        <Form title='Add User' width='large'
-          data={data}
-          busy={busy}
-          submitControl={true}
-          onSubmit={this._addUser}
-          onCancel={this._onCancel}
-          collectionData={collectionData}
-        />
+        <Box size='large' alignSelf='center'>
+          <Form title='Add User'
+            data={data}
+            busy={busy}
+            submitControl={true}
+            onSubmit={this._addUser}
+            onCancel={this._onCancel}
+            collectionData={collectionData}
+          />
+        </Box>
       </Box>
     );
   }
@@ -173,7 +173,7 @@ const select = (store) => {
     user: store.user, 
     tenant: store.tenant, 
     buyer: store.buyer,
-    department: store.department
+    role: store.role
   };
 };
 

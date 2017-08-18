@@ -1,4 +1,4 @@
-import { CREATE, UPDATE } from 'jazasoft/rest/types';
+import { CREATE, UPDATE, PATCH } from 'jazasoft/rest/types';
 import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
 import { SHOW_SNACKBAR } from 'jazasoft/actions/notificationActions';
 
@@ -8,10 +8,12 @@ const resource1 = 'users';
 const resource2 = 'tUsers';
 
 export const USER_BAD_REQUEST = 'USER_BAD_REQUEST';
-
 export const USER_ADD_PROGRESS = 'USER_ADD_PROGRESS';
 export const USER_ADD_SUCCESS = 'USER_ADD_SUCCESS';
 export const USER_ADD_CANCEL = 'USER_ADD_CANCEL';
+export const USER_UPDATE_PROGRESS = 'USER_UPDATE_PROGRESS';
+export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
+export const USER_UPDATE_CANCEL = 'USER_UPDATE_CANCEL';
 
 export const addUser = (restClient, formData, collectionData) => {
 
@@ -88,3 +90,81 @@ export const addUser = (restClient, formData, collectionData) => {
     });
   };
 };
+
+
+export const updateUser = (restClient, formData, collectionData) => {
+  
+  return (dispatch) => {
+    let noOfRequest = 0;
+
+    const collections = getCollectionData(collectionData);
+    let roles;
+    let user = {...formData};
+
+    const role = getRoles();
+    if (role.length == 1 && role.includes('ROLE_MASTER')) {
+      noOfRequest = 1;
+      let companyId;
+      if (formData.companyId == undefined) {
+        roles = 'MASTER';
+      } else {
+        roles = 'ADMIN';
+        companyId = formData.companyId.value;
+      }
+      user = {...user, roles, companyId};
+    }
+    
+    let updateUserPermission;
+    if (role.length == 1 && role.includes('ROLE_ADMIN')) {
+      noOfRequest = 2;
+      roles = formData.groupId.label;
+
+      updateUserPermission = () => {
+        const buyerList = collections[0].map(b => b.buyer);
+        const tUser = {groupId: formData.groupId.value, buyerList};
+        const options = {id: user.id, data: tUser};
+
+        restClient(UPDATE, resource2, options, dispatch)
+        .then(response => {
+          if (response && response.status == 200) {
+            dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User updated Successfully.'}}});
+            dispatch({type: CLEAR_ERROR});
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            dispatch({type: USER_BAD_REQUEST});
+          } else {
+            dispatch({type: USER_UPDATE_CANCEL});
+          }
+        });
+      }
+    }
+    user = {...user, roles};
+    const options = {data: user, id: user.id};
+
+    dispatch({type: USER_UPDATE_PROGRESS});
+    restClient(PATCH, resource1, options, dispatch)
+    .then(response => {
+      if (response && response.status == 200) {
+
+        dispatch({type: USER_UPDATE_SUCCESS, payload: { id: response.data.id, user: response.data}});
+        dispatch({type: CLEAR_ERROR});
+        if (noOfRequest == 1) {
+          dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User updated Successfully.'}}});
+        } else if (noOfRequest == 2) {
+          updateUserPermission(dispatch, restClient, response.data.id, formData, collections);
+        }
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      if (error.response.status == 400) {
+        dispatch({type: USER_BAD_REQUEST});
+      } else {
+        dispatch({type: USER_UPDATE_CANCEL});
+      }
+    });
+  };
+};
+  
