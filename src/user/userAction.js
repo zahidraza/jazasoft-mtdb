@@ -1,6 +1,7 @@
 import { CREATE, UPDATE, PATCH } from 'jazasoft/rest/types';
-import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
+//import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
 import { SHOW_SNACKBAR } from 'jazasoft/actions/notificationActions';
+import { OPERATION_COMPLETED } from 'jazasoft/actions/formActions';
 
 import {getRoles, getCollectionData, getCsvFromArray} from 'jazasoft/utils/utility';
 
@@ -14,6 +15,7 @@ export const USER_ADD_CANCEL = 'USER_ADD_CANCEL';
 export const USER_UPDATE_PROGRESS = 'USER_UPDATE_PROGRESS';
 export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_CANCEL = 'USER_UPDATE_CANCEL';
+const TUSER_UPDATE_SUCCESS = 'TUSER_UPDATE_SUCCESS';
 
 export const addUser = (restClient, formData, collectionData) => {
 
@@ -50,8 +52,9 @@ export const addUser = (restClient, formData, collectionData) => {
         restClient(UPDATE, resource2, options, dispatch)
         .then(response => {
           if (response && (response.status == 201 || response.status == 200)) {
+            dispatch({type: TUSER_UPDATE_SUCCESS, payload: {id: response.data.id, tUser: response.data}});
             dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User added Successfully.'}}});
-            dispatch({type: CLEAR_ERROR});
+            dispatch({type: OPERATION_COMPLETED});
           }
         })
         .catch(error => {
@@ -72,9 +75,9 @@ export const addUser = (restClient, formData, collectionData) => {
       if (response && (response.status == 201 || response.status == 200)) {
 
         dispatch({type: USER_ADD_SUCCESS, payload: { id: response.data.id, user: response.data}});
-        dispatch({type: CLEAR_ERROR});
         if (noOfRequest == 1) {
           dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User added Successfully.'}}});
+          dispatch({type: OPERATION_COMPLETED});
         } else if (noOfRequest == 2) {
           addUserPermission(dispatch, restClient, response.data.id, formData, collections);
         }
@@ -127,8 +130,9 @@ export const updateUser = (restClient, formData, collectionData) => {
         restClient(UPDATE, resource2, options, dispatch)
         .then(response => {
           if (response && response.status == 200) {
+            dispatch({type: TUSER_UPDATE_SUCCESS, payload: {id: response.data.id, tUser: response.data}});
             dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User updated Successfully.'}}});
-            dispatch({type: CLEAR_ERROR});
+            dispatch({type: OPERATION_COMPLETED});
           }
         })
         .catch(error => {
@@ -149,9 +153,9 @@ export const updateUser = (restClient, formData, collectionData) => {
       if (response && response.status == 200) {
 
         dispatch({type: USER_UPDATE_SUCCESS, payload: { id: response.data.id, user: response.data}});
-        dispatch({type: CLEAR_ERROR});
         if (noOfRequest == 1) {
           dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User updated Successfully.'}}});
+          dispatch({type: OPERATION_COMPLETED});
         } else if (noOfRequest == 2) {
           updateUserPermission(dispatch, restClient, response.data.id, formData, collections);
         }

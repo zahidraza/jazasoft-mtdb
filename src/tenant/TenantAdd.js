@@ -16,8 +16,8 @@ class TenantAdd extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {tenant: {busy, adding}, form: {toggleForm}} = nextProps;
-    if (this.props.form.toggleForm == toggleForm && !busy && !adding) {
+    const {tenant: {busy, adding}, form: {opCompleted}} = nextProps;
+    if (opCompleted && !busy && !adding) {
       this.props.history.push('/tenant');
     }
   }
@@ -64,13 +64,15 @@ class TenantAdd extends Component {
 
     return (
       <Box>
-        <Form title='Add Tenant'
-          data={data}
-          busy={busy}
-          submitControl={true}
-          onSubmit={this._addTenant}
-          onCancel={this._onCancel}
-        />
+        <Box alignSelf='center' size='medium' >
+          <Form title='Add Tenant'
+            data={data}
+            busy={busy}
+            submitControl={true}
+            onSubmit={this._addTenant}
+            onCancel={this._onCancel}
+          />
+        </Box>
       </Box>
     );
   }

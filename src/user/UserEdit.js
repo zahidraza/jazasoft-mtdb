@@ -17,9 +17,9 @@ class UserEdit extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {user: {busy, updating}, form: {toggleForm}} = nextProps;
-    if (this.props.form.toggleForm == toggleForm && !busy && !updating) {
-      //this.props.history.push('/user');
+    const {user: {busy, updating}, form: {opCompleted}} = nextProps;
+    if (opCompleted && !busy && !updating) {
+      this.props.history.push('/user');
     }
   }
   

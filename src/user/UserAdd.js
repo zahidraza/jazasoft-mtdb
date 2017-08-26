@@ -25,9 +25,8 @@ class UserAdd extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {user: {busy, adding}, form: {toggleForm}} = nextProps;
-    if (this.props.form.toggleForm == toggleForm && !busy && !adding) {
-      this.setState({user: {}});
+    const {user: {busy, adding}, form: {opCompleted}} = nextProps;
+    if (opCompleted && !busy && !adding) {
       this.props.history.push('/user');
     }
   }
