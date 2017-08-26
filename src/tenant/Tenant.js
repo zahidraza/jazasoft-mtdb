@@ -18,7 +18,6 @@ class Tenant extends Component {
     console.log('onSearch');
   }
 
-
   render() {
     const { tenants } = this.props.tenant;
 

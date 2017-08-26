@@ -36,14 +36,14 @@ class UserAdd extends Component {
     let { formData, collectionData } = this.props.form;
 
     if (role.length == 1 && role.includes('ROLE_ADMIN')) {
-      if (formData.groupId == undefined) {
+      if (typeof formData.groupId !== 'object') {
         alert('Select User Group');
         return;
       }
 
       if (collectionData[0] == undefined || collectionData[0].length == 0) {
-        alert('Add Buyer Access');
-        return;
+        const res = confirm('No buyer access granted. Are you sure?');
+        if (!res) return;
       } 
     }
 

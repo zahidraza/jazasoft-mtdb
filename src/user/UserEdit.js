@@ -45,7 +45,8 @@ class UserEdit extends Component {
     const user = users[id];
     const tUser = tUsers[id];
     let userRole;
-
+    console.log(tUsers);
+    console.log(tUser);
     let data = [], collectionData = [];
     if (user) {
       userRole = user.authorities.map(e => e.authority);
@@ -82,7 +83,6 @@ class UserEdit extends Component {
     
     }
     
-
     if (tUser && userRole && !userRole.includes('ROLE_ADMIN')) {
       const roleOptions = denormalise(roles).map(ug => ({label: ug.name, value: ug.id}));
       const value = {label: tUser.userGroup.name, value: tUser.userGroup.id};

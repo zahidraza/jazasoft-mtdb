@@ -64,7 +64,7 @@ class TenantAdd extends Component {
 
     return (
       <Box>
-        <Box alignSelf='center' size='medium' >
+        <Box alignSelf='center' size='large' >
           <Form title='Add Tenant'
             data={data}
             busy={busy}
