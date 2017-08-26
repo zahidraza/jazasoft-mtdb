@@ -66,24 +66,24 @@ class User extends Component {
 
     let headers = ['name', 'username', 'email', 'role', 'mobile'];
 
+    let filterItems = [];
     if (getRoles().includes('ROLE_MASTER')) {
       headers.push('company');
-    }
 
-    let tenantItems = denormalise(tenants).map(t => t.name);
-
-    let roleItems = denormalise(roles).map(r => r.name);
-
-    const filterItems = [
-      {
-        label: 'company',
+      let tenantItems = denormalise(tenants).map(t => t.name);
+      filterItems.push({
+        label: 'Company',
+        key: 'company',
         elements: tenantItems
-      },
-      {
-        label: 'role',
+      });
+    } else {
+      let roleItems = denormalise(roles).map(r => r.name);
+      filterItems.push({
+        label: 'Role',
+        key: 'role',
         elements: roleItems
-      }
-    ];
+      });
+    }
 
     return (
       <Box>
