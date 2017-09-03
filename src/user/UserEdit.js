@@ -115,7 +115,7 @@ class UserEdit extends Component {
           collectionItems: buyerItems,
           elements: buyerElements,
           container: 'list',
-          secondaryTitle: 'Add Buyer Permission',
+          secondaryTitle: 'Update Buyer Permission',
           dialogPlaceholder: 'Select Buyer'
         }
       ]

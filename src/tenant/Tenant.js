@@ -23,6 +23,7 @@ class Tenant extends Component {
 
     const headers = [
       {key: 'name', label: 'Tenant'},
+      {key: 'description', label: 'Description'},
       {key: 'dbName', label: 'Database'},
       {key: 'address', label: 'Address'}
     ];
@@ -39,8 +40,9 @@ class Tenant extends Component {
           addControl={true}
           helpControl={true}
         />
-
+        <Box alignSelf='center' >
         <Table headers={headers}  data={data} width='xlarge' />
+        </Box>
       </Box>
     );
   }

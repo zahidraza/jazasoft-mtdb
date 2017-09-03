@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import {getRoles, denormalise} from 'jazasoft/utils/utility';
+import { SORT_APPLY } from 'jazasoft/actions/filterActions';
 
 import Box from 'grommet/components/Box';
 import PageHeader from 'jazasoft/components/PageHeader';
@@ -84,12 +85,14 @@ class User extends Component {
         elements: roleItems
       });
     }
+    const sortOptions = [{label: 'Name', value: 'name', direction: 'asc'}];
 
     return (
       <Box>
         <PageHeader title='User' 
           searchControl={true}
           onSearch={this._onSearch}
+          searchPlaceholder='Search for Name or Username or Email'
           addControl={true}
           filterControl={true}
           onFilter={this._toggleFilter}
@@ -99,12 +102,14 @@ class User extends Component {
         <Table scope='read,update'
             headers={headers}  
             data={this.state.data}
-            onClick={this._onClick} />
+            onClick={this._onClick}
+            searchKeys={['name','username','email']} />
 
         <Filter
           active={this.state.filterActive}
           onClose={this._toggleFilter}
-          filterItems={filterItems}/> 
+          filterItems={filterItems}
+          sortOptions={sortOptions}/> 
       </Box>
     );
   }

@@ -41,13 +41,13 @@ class UserAdd extends Component {
         return;
       }
 
-      if (collectionData[0] == undefined || collectionData[0].length == 0) {
+      if (!formData.allBuyer && (collectionData[0] == undefined || collectionData[0].length == 0)) {
         const res = confirm('No buyer access granted. Are you sure?');
         if (!res) return;
       } 
     }
 
-    this.props.dispatch(addUser(this.props.restClient, formData, collectionData));
+    this.props.dispatch(addUser(this.props.restClient, formData, collectionData, denormalise(this.props.buyer.buyers)));
   }
 
   _onCancel () {
@@ -64,6 +64,7 @@ class UserAdd extends Component {
       role: {roles} 
     } = this.props;
     const { role } = this.state;
+    let key = '1';
 
     const tenantOptions = denormalise(tenants).map(t => ({label: t.name, value: t.id}));
     const roleOptions = denormalise(roles).map(ug => ({label: ug.name, value: ug.id}));
@@ -116,7 +117,6 @@ class UserAdd extends Component {
 
     if (role.length == 1 && role.includes('ROLE_ADMIN')) {
       const groupElement = {
-        title: 'Add User Group',
         elements: [
           {
             elementType: 'select',
@@ -124,7 +124,13 @@ class UserAdd extends Component {
             name: 'groupId',
             placeholder: 'Select Role',
             options: roleOptions
-          }
+          },
+          {
+            elementType: 'checkbox',
+            label: 'Permission for all buyers',
+            name: 'allBuyer',
+            value: true
+          },
         ]
       };
 
@@ -144,15 +150,16 @@ class UserAdd extends Component {
         secondaryTitle: 'Add Buyer Permission',
         dialogPlaceholder: 'Select Buyer'
       };
-
-      collectionData.push(buyerCollection);
+      if (!this.props.form.formData.allBuyer) {
+        collectionData.push(buyerCollection);
+      }
       data.push(groupElement);
     }
 
     return (
       <Box>
         <Box size='large' alignSelf='center'>
-          <Form title='Add User'
+          <Form key={key} title='Add User'
             data={data}
             busy={busy}
             submitControl={true}

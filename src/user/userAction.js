@@ -18,7 +18,7 @@ export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_CANCEL = 'USER_UPDATE_CANCEL';
 const TUSER_UPDATE_SUCCESS = 'TUSER_UPDATE_SUCCESS';
 
-export const addUser = (restClient, formData, collectionData) => {
+export const addUser = (restClient, formData, collectionData, buyers) => {
 
   return (dispatch) => {
     let data = [
@@ -55,7 +55,9 @@ export const addUser = (restClient, formData, collectionData) => {
 
       addUserPermission = (dispatch, restClient, userId, formData, collections) => {
         let buyerList = [];
-        if (collections[0]) {
+        if (formData.allBuyer) {
+          buyerList = buyers.map(e => e.id);
+        } else if (collections[0]) {
           buyerList = collections[0].map(b => b.buyer);
         }
         const tUser = {groupId: formData.groupId.value, buyerList};
