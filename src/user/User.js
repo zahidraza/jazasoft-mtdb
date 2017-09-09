@@ -99,7 +99,7 @@ class User extends Component {
           helpControl={true}
         />
 
-        <Table scope='read,update'
+        <Table scope={['read','update']}
             headers={headers}  
             data={this.state.data}
             onClick={this._onClick}
