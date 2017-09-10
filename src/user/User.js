@@ -53,8 +53,7 @@ class User extends Component {
     this.setState({filterActive: !this.state.filterActive});
   }
 
-  _onClick (action, index) {
-    const id = this.state.data[index].id;
+  _onClick (action, id) {
     if (action == 'read') {
       this.props.history.push('/user/' + id + '/view');
     } else if (action == 'update') {
