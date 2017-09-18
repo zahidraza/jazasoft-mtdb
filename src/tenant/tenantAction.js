@@ -1,5 +1,4 @@
 import { CREATE, UPDATE } from 'jazasoft/rest/types';
-//import { CLEAR_ERROR } from 'jazasoft/actions/errActions';
 import { SHOW_SNACKBAR } from 'jazasoft/actions/notificationActions';
 import { OPERATION_COMPLETED } from 'jazasoft/actions/formActions';
 import {STRING, validate} from 'jazasoft/utils/validator';
