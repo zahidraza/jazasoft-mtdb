@@ -19,7 +19,7 @@ class User extends Component {
       checked: false,
       data: []
     };
-    this._onSearch = this._onSearch.bind(this);
+    this._onHelp = this._onHelp.bind(this);
     this._toggleFilter = this._toggleFilter.bind(this);
     this._onClick = this._onClick.bind(this);
     this._loadData = this._loadData.bind(this);
@@ -45,8 +45,8 @@ class User extends Component {
     this.setState({data});
   }
   
-  _onSearch () {
-    console.log('onSearch');
+  _onHelp () {
+    this.props.history.push('/faq/user');
   }
 
   _toggleFilter () {
@@ -96,6 +96,7 @@ class User extends Component {
           filterControl={true}
           onFilter={this._toggleFilter}
           helpControl={true}
+          onHelp={this._onHelp}
         />
 
         <Table scope={['read','update']}
