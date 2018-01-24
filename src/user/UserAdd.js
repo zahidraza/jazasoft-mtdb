@@ -35,19 +35,26 @@ class UserAdd extends Component {
     const { role } = this.state;
     let { formData, collectionData } = this.props.form;
 
-    if (role.length == 1 && role.includes('ROLE_ADMIN')) {
-      if (typeof formData.groupId !== 'object') {
-        alert('Select User Group');
-        return;
-      }
+    // if (role.length == 1 && role.includes('ROLE_ADMIN')) {
+    //   if (typeof formData.groupId !== 'object') {
+    //     alert('Select User Group');
+    //     return;
+    //   }
 
-      if (!formData.allBuyer && (collectionData[0] == undefined || collectionData[0].length == 0)) {
-        const res = confirm('No buyer access granted. Are you sure?');
-        if (!res) return;
-      } 
+    //   if (!formData.allBuyer && (collectionData[0] == undefined || collectionData[0].length == 0)) {
+    //     const res = confirm('No buyer access granted. Are you sure?');
+    //     if (!res) return;
+    //   } 
+    // }
+    let roles = formData.roles;
+    if (roles) {
+      roles = roles.label.substring(5);
+      formData = {...formData, roles};
     }
-
-    this.props.dispatch(addUser(this.props.restClient, formData, collectionData, denormalise(this.props.buyer.buyers)));
+    if (formData.companyId) {
+      formData = {...formData, companyId: formData.companyId.value, roles: 'ADMIN'};
+    }
+    this.props.dispatch(addUser(this.props.restClient, formData));
   }
 
   _onCancel () {
@@ -121,16 +128,10 @@ class UserAdd extends Component {
           {
             elementType: 'select',
             label: 'Role*',
-            name: 'groupId',
+            name: 'roles',
             placeholder: 'Select Role',
             options: roleOptions
-          },
-          {
-            elementType: 'checkbox',
-            label: 'Permission for all buyers',
-            name: 'allBuyer',
-            value: true
-          },
+          }
         ]
       };
 
@@ -165,7 +166,6 @@ class UserAdd extends Component {
             submitControl={true}
             onSubmit={this._addUser}
             onCancel={this._onCancel}
-            collectionData={collectionData}
           />
         </Box>
       </Box>

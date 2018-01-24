@@ -18,69 +18,69 @@ export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_CANCEL = 'USER_UPDATE_CANCEL';
 const TUSER_UPDATE_SUCCESS = 'TUSER_UPDATE_SUCCESS';
 
-export const addUser = (restClient, formData, collectionData, buyers) => {
+export const addUser = (restClient, formData) => {
 
   return (dispatch) => {
-    let data = [
-      {type: STRING, key: 'name', value: formData.name, min: 3, max: 50, message: 'Full name length must be between 3 to 50 characters'},
-      {type: STRING, key: 'username', value: formData.username, min: 3, max: 50, message: 'Username length must be between 3 to 50 characters'},
-      {type: STRING, key: 'email', value: formData.email, min: 3, max: 50, message: 'Incorrect Email id.'},
-      {type: NUMBER, key: 'mobile', value: formData.mobile, min: 1000000000, max: 9999999999, message: 'mobile number must be 10 digit number.'},
-    ];
-    if (!validate(dispatch, data))  return;
+    // let data = [
+    //   {type: STRING, key: 'name', value: formData.name, min: 3, max: 50, message: 'Full name length must be between 3 to 50 characters'},
+    //   {type: STRING, key: 'username', value: formData.username, min: 3, max: 50, message: 'Username length must be between 3 to 50 characters'},
+    //   {type: STRING, key: 'email', value: formData.email, min: 3, max: 50, message: 'Incorrect Email id.'},
+    //   {type: NUMBER, key: 'mobile', value: formData.mobile, min: 1000000000, max: 9999999999, message: 'mobile number must be 10 digit number.'},
+    // ];
+    // if (!validate(dispatch, data))  return;
 
-    let noOfRequest = 0;
+    // let noOfRequest = 0;
 
-    const collections = getCollectionData(collectionData);
-    let roles;
+    // const collections = getCollectionData(collectionData);
+    // let roles;
     let user = {...formData};
 
-    const role = getRoles();
-    if (role.length == 1 && role.includes('ROLE_MASTER')) {
-      noOfRequest = 1;
-      let companyId;
-      if (formData.companyId == undefined) {
-        roles = 'MASTER';
-      } else {
-        roles = 'ADMIN';
-        companyId = formData.companyId.value;
-      }
-      user = {...user, roles, companyId};
-    }
+    // const role = getRoles();
+    // if (role.length == 1 && role.includes('ROLE_MASTER')) {
+    //   noOfRequest = 1;
+    //   let companyId;
+    //   if (formData.companyId == undefined) {
+    //     roles = 'MASTER';
+    //   } else {
+    //     roles = 'ADMIN';
+    //     companyId = formData.companyId.value;
+    //   }
+    //   user = {...user, roles, companyId};
+    // }
     
-    let addUserPermission;
-    if (role.length == 1 && role.includes('ROLE_ADMIN')) {
-      noOfRequest = 2;
-      roles = formData.groupId.label;
+    // let addUserPermission;
+    // if (role.length == 1 && role.includes('ROLE_ADMIN')) {
+    //   noOfRequest = 2;
+    //   roles = formData.groupId.label;
 
-      addUserPermission = (dispatch, restClient, userId, formData, collections) => {
-        let buyerList = [];
-        if (formData.allBuyer) {
-          buyerList = buyers.map(e => e.id);
-        } else if (collections[0]) {
-          buyerList = collections[0].map(b => b.buyer);
-        }
-        const tUser = {groupId: formData.groupId.value, buyerList};
-        const options = {id: userId, data: tUser};
+    //   addUserPermission = (dispatch, restClient, userId, formData, collections) => {
+    //     let buyerList = [];
+    //     if (formData.allBuyer) {
+    //       buyerList = buyers.map(e => e.id);
+    //     } else if (collections[0]) {
+    //       buyerList = collections[0].map(b => b.buyer);
+    //     }
+    //     const tUser = {groupId: formData.groupId.value, buyerList};
+    //     const options = {id: userId, data: tUser};
 
-        restClient(UPDATE, resource2, options, dispatch)
-        .then(response => {
-          if (response && (response.status == 201 || response.status == 200)) {
-            dispatch({type: TUSER_UPDATE_SUCCESS, payload: {id: response.data.id, tUser: response.data}});
-            dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User added Successfully.'}}});
-            dispatch({type: OPERATION_COMPLETED});
-          }
-        })
-        .catch(error => {
-          if (error.response.status == 400) {
-            dispatch({type: USER_BAD_REQUEST});
-          } else {
-            dispatch({type: USER_ADD_CANCEL});
-          }
-        });
-      }
-    }
-    user = {...user, roles};
+    //     restClient(UPDATE, resource2, options, dispatch)
+    //     .then(response => {
+    //       if (response && (response.status == 201 || response.status == 200)) {
+    //         dispatch({type: TUSER_UPDATE_SUCCESS, payload: {id: response.data.id, tUser: response.data}});
+    //         dispatch({type: SHOW_SNACKBAR, payload: {snackbar: {message: 'User added Successfully.'}}});
+    //         dispatch({type: OPERATION_COMPLETED});
+    //       }
+    //     })
+    //     .catch(error => {
+    //       if (error.response.status == 400) {
+    //         dispatch({type: USER_BAD_REQUEST});
+    //       } else {
+    //         dispatch({type: USER_ADD_CANCEL});
+    //       }
+    //     });
+    //   }
+    // }
+    // user = {...user, roles};
     const options = {data: user};
 
     dispatch({type: USER_ADD_PROGRESS});
